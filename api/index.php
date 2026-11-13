@@ -12,235 +12,12 @@ $profile = [
     'email'       => 'sonukola74@gmail.com',
     'phone'       => '+91 9100253853',
     'phone_raw'   => '+919100253853',
-    'resume_link' => '?open_resume=1',
 ];
 
-// ============================================================
-// 1. WEB RESUME PAGE (Replaces the PDF)
-// ============================================================
-if (isset($_GET['open_resume'])) {
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Resume — <?= htmlspecialchars($profile['name']) ?></title>
-    <style>
-        :root{
-            --text:#f5f7ff; --muted:rgba(232,240,255,.7); --faint:rgba(232,240,255,.5);
-            --sky:#7dd3fc; --violet:#a78bfa; --rose:#f0abfc;
-            --glass-bg:linear-gradient(152deg, rgba(255,255,255,.165) 0%, rgba(255,255,255,.045) 46%, rgba(255,255,255,.105) 100%);
-            --glass-border:1px solid rgba(255,255,255,.22);
-        }
-        *{box-sizing:border-box;}
-        body{
-            margin:0; min-height:100dvh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-            color:var(--text); background:#06070f; line-height:1.6; padding:40px 20px;
-            -webkit-font-smoothing:antialiased;
-        }
-        .bg{position:fixed; inset:0; z-index:-3; background:radial-gradient(1200px 800px at 12% -10%, #1e0f4a 0%, transparent 60%), radial-gradient(1000px 760px at 92% 0%, #06283e 0%, transparent 58%), #06070f;}
-        .blob{position:absolute; border-radius:50%; filter:blur(86px); opacity:.55;}
-        .b1{width:620px;height:620px;left:-14%;top:-16%;background:radial-gradient(circle,#4a7cff 0%,transparent 72%);}
-        .b2{width:520px;height:520px;right:-12%;top:0%;background:radial-gradient(circle,#0fd4d4 0%,transparent 72%);}
-        .b3{width:680px;height:680px;left:22%;bottom:-26%;background:radial-gradient(circle,#8b5cf6 0%,transparent 72%);}
-        
-        .resume-wrap{max-width:900px; margin:0 auto; position:relative;}
-        .glass{
-            position:relative; border-radius:32px; background:var(--glass-bg); border:var(--glass-border);
-            backdrop-filter:blur(32px) saturate(200%); -webkit-backdrop-filter:blur(32px) saturate(200%);
-            box-shadow:0 50px 96px -38px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.48);
-            padding:50px;
-        }
-        
-        /* Top Actions */
-        .actions{display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;}
-        .btn{
-            display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:99px;
-            font-weight:700; font-size:.9rem; text-decoration:none; cursor:pointer; transition:0.3s;
-            background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff;
-        }
-        .btn:hover{background:rgba(255,255,255,.2);}
-        .btn-primary{background:linear-gradient(135deg,#8fd3ff,#b9a3ff); color:#080a16; border:none;}
-        .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(125,211,252,.3);}
-
-        /* Resume Content */
-        .header{border-bottom:1px solid rgba(255,255,255,.15); padding-bottom:30px; margin-bottom:30px;}
-        .header h1{font-size:2.5rem; font-weight:800; margin:0 0 10px 0; letter-spacing:-.03em;}
-        .contact-info{display:flex; flex-wrap:wrap; gap:20px; color:var(--muted); font-size:.95rem;}
-        .contact-info a{color:var(--sky); text-decoration:none;}
-        
-        .section{margin-bottom:35px;}
-        .section-title{
-            font-size:1.1rem; text-transform:uppercase; letter-spacing:.1em; font-weight:800;
-            color:var(--sky); margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,.1); padding-bottom:8px;
-        }
-        .item{margin-bottom:20px;}
-        .item:last-child{margin-bottom:0;}
-        .item-header{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; margin-bottom:5px;}
-        .item-title{font-weight:700; font-size:1.1rem;}
-        .item-date{font-size:.85rem; color:var(--faint); font-weight:600; text-transform:uppercase; letter-spacing:.05em;}
-        .item-sub{color:var(--violet); font-weight:600; font-size:.95rem; margin-bottom:10px;}
-        
-        ul{padding-left:20px; margin:0;}
-        li{margin-bottom:8px; color:var(--muted);}
-        li::marker{color:var(--sky);}
-        
-        .skills-grid{display:grid; gap:12px;}
-        .skill-row{display:grid; grid-template-columns:200px 1fr; gap:15px;}
-        .skill-name{font-weight:700; color:var(--text);}
-        .skill-list{color:var(--muted);}
-        
-        @media (max-width: 768px){
-            .glass{padding:25px;}
-            .header h1{font-size:2rem;}
-            .skill-row{grid-template-columns:1fr; gap:5px;}
-            .actions{flex-direction:column; gap:10px;}
-            .btn{width:100%; justify-content:center;}
-        }
-        
-        @media print {
-            body{background:#fff; color:#000; padding:0;}
-            .bg, .actions{display:none;}
-            .glass{box-shadow:none; border:none; background:none; padding:0; backdrop-filter:none;}
-            .section-title{color:#000; border-bottom-color:#ccc;}
-            .item-sub{color:#333;}
-            li, .contact-info, .skill-list{color:#444;}
-            li::marker{color:#000;}
-        }
-    </style>
-    </head>
-    <body>
-        <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-        
-        <div class="resume-wrap">
-            <div class="actions">
-                <a href="./" class="btn">← Back to Portfolio</a>
-                <button onclick="window.print()" class="btn btn-primary">🖨️ Print / Save as PDF</button>
-            </div>
-            
-            <div class="glass">
-                <div class="header">
-                    <h1><?= htmlspecialchars($profile['name']) ?></h1>
-                    <div class="contact-info">
-                        <span>✉ <a href="mailto:<?= htmlspecialchars($profile['email']) ?>"><?= htmlspecialchars($profile['email']) ?></a></span>
-                        <span>📞 <a href="tel:<?= htmlspecialchars($profile['phone_raw']) ?>"><?= htmlspecialchars($profile['phone']) ?></a></span>
-                    </div>
-                </div>
-
-                <!-- EDUCATION -->
-                <div class="section">
-                    <div class="section-title">Education</div>
-                    <div class="item">
-                        <div class="item-header">
-                            <div class="item-title">Jawaharlal Nehru Technological University, Ananthapur</div>
-                            <div class="item-date">2018 - 2022</div>
-                        </div>
-                        <div class="item-sub">Bachelor's in technology, Electronics and communication engineering</div>
-                    </div>
-                    <div class="item">
-                        <div class="item-header">
-                            <div class="item-title">Narayana Junior college, Nellore</div>
-                            <div class="item-date">2016 - 2018</div>
-                        </div>
-                        <div class="item-sub">MPC</div>
-                    </div>
-                </div>
-
-                <!-- SKILLS -->
-                <div class="section">
-                    <div class="section-title">Skills and Proficiencies</div>
-                    <div class="skills-grid">
-                        <div class="skill-row"><div class="skill-name">Content Marketing & Strategy</div><div class="skill-list">Content Strategy, Content Planning, Content Creation, Content Research, Blog Writing, Website Content Development, Content Optimization, Competitor Research.</div></div>
-                        <div class="skill-row"><div class="skill-name">Email & Campaign Marketing</div><div class="skill-list">Email Campaign Content, Social Media Content, Content Distribution, Lead Generation.</div></div>
-                        <div class="skill-row"><div class="skill-name">AI-Assisted Content Creation</div><div class="skill-list">AI-Powered Research, AI-Assisted Writing, Content Editing, Content Refinement, Content Ideation.</div></div>
-                        <div class="skill-row"><div class="skill-name">SEO & Organic Growth</div><div class="skill-list">Technical SEO, On-Page SEO, Off-Page SEO, Keyword Research, Search Intent Analysis, Website Audits, Link Building.</div></div>
-                        <div class="skill-row"><div class="skill-name">Website Platforms</div><div class="skill-list">WordPress, Wix, Google Sites.</div></div>
-                        <div class="skill-row"><div class="skill-name">Leadership & Collaboration</div><div class="skill-list">Independent Project Management, Junior Team Mentoring, Cross-functional Collaboration.</div></div>
-                    </div>
-                </div>
-
-                <!-- WORK EXPERIENCE -->
-                <div class="section">
-                    <div class="section-title">Work Experience</div>
-                    <div class="item">
-                        <div class="item-header">
-                            <div class="item-title">Fexle Services Pvt Ltd</div>
-                            <div class="item-date">Jan 2023 - Feb 2025</div>
-                        </div>
-                        <div class="item-sub">Marketing Associate</div>
-                        <ul>
-                            <li>Independently researched, planned, created and optimized SEO-focused articles, blogs and website content.</li>
-                            <li>Developed content based on keyword research, search intent, competitor analysis and business requirements.</li>
-                            <li>Created email campaign content and follow-up emails to support marketing communication and lead nurturing.</li>
-                            <li>Used AI tools to assist with content research, drafting and refinement.</li>
-                            <li>Managed website content and technical, on-page and off-page SEO activities.</li>
-                            <li>Coordinated with developers to implement website improvements.</li>
-                            <li>Managed social media campaigns to distribute content and generate business enquiries.</li>
-                            <li>Analyzed marketing performance and prepared weekly reports.</li>
-                            <li>Mentored three junior team members and organized employee engagement activities.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- PROJECTS -->
-                <div class="section">
-                    <div class="section-title">Projects</div>
-                    <div class="item">
-                        <div class="item-title">Quizophy – Website SEO Optimization</div>
-                        <ul>
-                            <li>Executed website SEO initiatives to strengthen Quizophy's organic search presence and improve search engine discoverability.</li>
-                            <li>Focused on optimizing the website for better visibility and long-term organic growth.</li>
-                        </ul>
-                    </div>
-                    <div class="item">
-                        <div class="item-title">Fexle Services – SEO & Content Marketing Management</div>
-                        <ul>
-                            <li>Independently managed diverse SEO and digital marketing initiatives, spanning content development, website optimization, technical audits and supporting website creation.</li>
-                            <li>Led social media campaigns and lead generation activities, contributing to stronger organic visibility and business enquiries.</li>
-                            <li>Written content for social media channels (LinkedIn, Instagram, Facebook) and website pages.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- ACHIEVEMENTS -->
-                <div class="section">
-                    <div class="section-title">Achievements</div>
-                    <ul>
-                        <li>Produced 50+ SEO content pieces, including articles, blogs and website content.</li>
-                        <li>Optimized 25+ existing articles to improve search performance.</li>
-                        <li>Secured first-page Google rankings for 20+ articles.</li>
-                        <li>Achieved #1 Google rankings for 10–20 target keywords.</li>
-                        <li>Contributed to 40% organic traffic growth across the website and articles within 1–3 months.</li>
-                        <li>Generated 6 - 7 qualified leads per month through social media campaigns.</li>
-                        <li>Contributed to at least one customer conversion per month for software services.</li>
-                        <li>Developed approximately 5 supporting websites to strengthen off-page SEO initiatives.</li>
-                    </ul>
-                </div>
-
-                <!-- TOOLS -->
-                <div class="section">
-                    <div class="section-title">Tools & Technologies</div>
-                    <div class="skills-grid">
-                        <div class="skill-row"><div class="skill-name">AI Tools & Research</div><div class="skill-list">ChatGPT, Gemini, Claude, Perplexity, Bing.</div></div>
-                        <div class="skill-row"><div class="skill-name">Content Creation & Mgmt</div><div class="skill-list">WordPress, Google Sites, Wix, Notion, Canva, Microsoft Word, Hemingway Editor, Grammarly.</div></div>
-                        <div class="skill-row"><div class="skill-name">SEO & Keyword Research</div><div class="skill-list">Google Search Console, Screaming Frog, Semrush, Ahrefs, Google Keyword Planner, Google Trends, AnswerThePublic.</div></div>
-                        <div class="skill-row"><div class="skill-name">Analytics & Performance</div><div class="skill-list">Google Analytics 4 (GA4), Looker Studio, Google Tag Manager</div></div>
-                        <div class="skill-row"><div class="skill-name">Email Marketing & CRM</div><div class="skill-list">Mailchimp</div></div>
-                        <div class="skill-row"><div class="skill-name">Productivity & PM</div><div class="skill-list">Microsoft Excel, Google Slides, Trello, Jira, Confluence.</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-    </html>
-    <?php
-    exit; // Stop executing the rest of the portfolio page
-}
-
-// ============================================================
-// 2. MAIN PORTFOLIO PAGE
-// ============================================================
+// Check if the user wants to view the resume
+$isResume = isset($_GET['open_resume']);
+$baseUrl  = 'https://dynamicflash.xyz/Portfolio.php';
+$navPrefix = $isResume ? $baseUrl : '';
 
 $brings = [
     ['title' => 'The idea person',           'desc' => 'Finding relevant topics, researching audiences and turning scattered thoughts into a content plan.'],
@@ -343,8 +120,8 @@ function e(?string $s): string {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#06070f">
-<meta name="description" content="Kola Jemima Suyosha — content marketing and SEO portfolio. Research-driven content that earns attention and delivers business results.">
-<title><?= e($profile['name']) ?> — Portfolio</title>
+<meta name="description" content="<?= e($profile['name']) ?> — Content Marketing & SEO Portfolio.">
+<title><?= e($profile['name']) ?> — <?= $isResume ? 'Resume' : 'Portfolio' ?></title>
 
 <style>
 /* ============================================================
@@ -597,6 +374,9 @@ ul{list-style:none;padding:0;}
   padding:10px 20px !important;
   box-shadow:0 10px 26px -12px rgba(125,211,252,.9);
   transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
 }
 .nav-cta:hover{transform:translateY(-1px);box-shadow:0 14px 30px -12px rgba(125,211,252,1);}
 .nav-cta .arrow{
@@ -607,7 +387,7 @@ ul{list-style:none;padding:0;}
 .nav-cta:hover .arrow{transform:translate(2px,-2px);}
 
 /* ============================================================
-   6. HERO
+   6. HERO & PORTFOLIO STYLES
    ============================================================ */
 .tilt{
   transform-style:preserve-3d;
@@ -640,365 +420,96 @@ ul{list-style:none;padding:0;}
   line-height:1.62;
 }
 
+.about-card{ padding:clamp(28px, 4.4vw, 52px); }
+.about-card p{ margin-top:16px; color:var(--muted); font-size:clamp(.92rem, 1.7vw, 1rem); line-height:1.72; max-width:70ch; }
+.about-card p:first-of-type{ margin-top:6px; color:rgba(238,244,255,.92); font-size:clamp(1rem, 1.9vw, 1.12rem); font-weight:500; }
+
+.bring-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(268px, 1fr)); gap:14px; margin-top:clamp(24px, 4vw, 42px); }
+.bring{ padding:24px 22px; border-radius:var(--r-xl); transition:transform .55s var(--ease), border-color .5s var(--ease); --blur:24px; }
+.bring:hover{ transform:translateY(-6px); border-color:rgba(255,255,255,.38); }
+.bring .icon{ display:grid; place-items:center; width:46px; height:46px; border-radius:14px; font-size:1.2rem; font-weight:800; color:#0a0c18; background:linear-gradient(140deg,var(--sky),var(--violet) 60%,var(--rose)); box-shadow:0 12px 26px -12px rgba(150,180,255,.95), inset 0 1px 0 rgba(255,255,255,.6); margin-bottom:16px; }
+.bring h4{ font-size:1.02rem; font-weight:750; letter-spacing:-.015em; line-height:1.3; }
+.bring p{ margin-top:8px; font-size:.86rem; color:var(--muted); line-height:1.58; }
+
+.proj{ padding:clamp(24px, 3.6vw, 42px); margin-top:20px; --blur:26px; }
+.proj-head{ display:flex; align-items:center; gap:18px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,.13); margin-bottom:26px; }
+.proj-num{ flex:0 0 auto; display:grid; place-items:center; width:56px; height:56px; border-radius:18px; font-size:1.05rem; font-weight:800; letter-spacing:-.02em; color:#0a0c18; background:linear-gradient(140deg,#9ad8ff,#c0a6ff); box-shadow:0 16px 34px -14px rgba(150,180,255,.95), inset 0 1px 0 rgba(255,255,255,.65); }
+.proj-head h3{ font-size:clamp(1.12rem, 2.8vw, 1.45rem); font-weight:800; letter-spacing:-.024em; line-height:1.22; }
+.proj-sub{ margin-top:4px; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:600; line-height:1.5; }
+.proj-body{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px, 3.4vw, 36px); }
+.block h5{ font-size:.72rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:rgba(160,200,255,.92); margin-bottom:10px; }
+.block p{ font-size:.9rem; color:var(--muted); line-height:1.65; }
+.block ul li{ position:relative; padding-left:22px; margin-bottom:10px; font-size:.875rem; color:var(--muted); line-height:1.58; }
+.block ul li:last-child{ margin-bottom:0; }
+.block ul li::before{ content:""; position:absolute; left:4px; top:.66em; width:6px; height:6px; border-radius:50%; background:linear-gradient(135deg,var(--sky),var(--violet)); box-shadow:0 0 9px rgba(125,211,252,.8); }
+.results-box{ padding:18px 20px; border-radius:var(--r-md); background:linear-gradient(150deg, rgba(94,234,212,.09), rgba(125,211,252,.05)); border:1px solid rgba(94,234,212,.22); }
+.results-box li{ color:rgba(230,240,255,.95); padding-left:28px; font-weight:500; }
+.results-box li::before{ content:"✓"; left:0; top:0; width:auto; height:auto; background:none; box-shadow:none; font-size:.88rem; font-weight:900; color:#6dfbb0; text-shadow:0 0 12px rgba(109,251,176,.75); }
+
+.workflow-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:clamp(24px, 4vw, 42px); }
+.step{ padding:24px 22px; border-radius:var(--r-xl); transition:transform .55s var(--ease), border-color .5s var(--ease); --blur:22px; position:relative; overflow:hidden; }
+.step:hover{ transform:translateY(-6px); border-color:rgba(255,255,255,.38); }
+.step::before{ content:""; position:absolute; top:-20%; right:-10%; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle, rgba(167,139,250,.32), transparent 70%); filter:blur(16px); pointer-events:none; }
+.step-num{ display:inline-block; font-size:2.4rem; font-weight:800; letter-spacing:-.05em; line-height:1; background:linear-gradient(135deg,#8fd3ff,#c0a6ff); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:10px; }
+.step h4{ font-size:1.02rem; font-weight:750; letter-spacing:-.014em; }
+.step p{ margin-top:6px; font-size:.85rem; color:var(--muted); line-height:1.55; }
+.workflow-note{ margin-top:clamp(24px, 3.5vw, 36px); padding:20px 24px; border-radius:var(--r-lg); background:linear-gradient(150deg, rgba(125,211,252,.08), rgba(167,139,250,.05)); border:1px solid rgba(255,255,255,.14); font-size:clamp(.9rem, 1.6vw, .98rem); color:rgba(236,242,255,.9); text-align:center; font-style:italic; }
+
+.tools-group{ margin-top:clamp(22px, 3.4vw, 36px); }
+.tools-head{ display:flex; align-items:center; gap:12px; margin-bottom:14px; font-size:.76rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+.tools-head::after{ content:""; flex:1; height:1px; background:linear-gradient(90deg, rgba(255,255,255,.22), transparent); }
+.chip-grid{ display:flex; flex-wrap:wrap; gap:9px; }
+.chip{ padding:10px 16px; border-radius:999px; font-size:.82rem; font-weight:600; color:rgba(240,245,255,.92); background:linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.045)); border:1px solid rgba(255,255,255,.20); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); transition:transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease); }
+.chip:hover{ transform:translateY(-3px); border-color:rgba(255,255,255,.4); background:linear-gradient(150deg, rgba(255,255,255,.19), rgba(255,255,255,.07)); }
+
+.curious-card{ padding:clamp(28px, 4.5vw, 52px); --blur:28px; }
+.curious-card h2{ font-size:clamp(1.55rem, 3.6vw, 2.2rem); font-weight:800; letter-spacing:-.028em; line-height:1.16; margin-top:12px; }
+.curious-card p{ margin-top:16px; color:var(--muted); font-size:clamp(.93rem, 1.7vw, 1rem); line-height:1.7; max-width:68ch; }
+.curious-card p:last-child{ color:rgba(220,232,255,.8); font-style:italic; }
+
+.footer{ margin-top:clamp(36px, 5vw, 66px); padding:clamp(28px, 4vw, 52px); text-align:center; --blur:26px; }
+.footer h2{ font-size:clamp(1.4rem, 3.8vw, 2.1rem); font-weight:800; letter-spacing:-.03em; line-height:1.18; }
+.contact-links{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:28px; }
+.contact-link{ display:inline-flex; align-items:center; gap:10px; padding:14px 22px; border-radius:999px; font-size:.9rem; font-weight:700; background:linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.045)); border:1px solid rgba(255,255,255,.22); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); transition:transform .45s var(--ease), background .4s var(--ease), border-color .4s var(--ease); }
+.contact-link:hover{ transform:translateY(-3px); background:linear-gradient(150deg, rgba(255,255,255,.19), rgba(255,255,255,.07)); border-color:rgba(255,255,255,.4); }
+.contact-link .ic{ display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:linear-gradient(140deg,var(--sky),var(--violet)); color:#080a14; font-size:.72rem; font-weight:900; flex:0 0 auto; }
+.copyright{ margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,.11); font-size:.76rem; color:var(--faint); letter-spacing:.03em; }
+
 /* ============================================================
-   7. ABOUT
+   7. RESUME SPECIFIC STYLES
    ============================================================ */
-.about-card{
-  padding:clamp(28px, 4.4vw, 52px);
-}
-.about-card p{
-  margin-top:16px;
-  color:var(--muted);
-  font-size:clamp(.92rem, 1.7vw, 1rem);
-  line-height:1.72;
-  max-width:70ch;
-}
-.about-card p:first-of-type{
-  margin-top:6px;
-  color:rgba(238,244,255,.92);
-  font-size:clamp(1rem, 1.9vw, 1.12rem);
-  font-weight:500;
+.resume-card{ padding:clamp(28px, 5vw, 56px); --blur:32px; margin-top:20px; }
+.resume-header{ border-bottom:1px solid rgba(255,255,255,.15); padding-bottom:26px; margin-bottom:30px; }
+.resume-header h1{ font-size:clamp(2rem, 5vw, 3rem); font-weight:800; letter-spacing:-.03em; margin-bottom:10px; }
+.resume-contact{ display:flex; flex-wrap:wrap; gap:20px; color:var(--muted); font-size:.95rem; }
+.resume-contact a{ color:var(--sky); text-decoration:none; transition:color .3s; }
+.resume-contact a:hover{ color:var(--violet); }
+
+.resume-section{ margin-bottom:35px; }
+.resume-section:last-child{ margin-bottom:0; }
+.resume-title{ font-size:.85rem; text-transform:uppercase; letter-spacing:.15em; font-weight:800; color:var(--sky); margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,.1); padding-bottom:8px; }
+.resume-item{ margin-bottom:22px; }
+.resume-item:last-child{ margin-bottom:0; }
+.resume-item-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; margin-bottom:5px; gap:10px; }
+.resume-item-title{ font-weight:700; font-size:1.1rem; color:var(--text); }
+.resume-item-date{ font-size:.78rem; color:var(--faint); font-weight:700; text-transform:uppercase; letter-spacing:.05em; background:rgba(255,255,255,.08); padding:4px 10px; border-radius:6px; }
+.resume-item-sub{ color:var(--violet); font-weight:600; font-size:.95rem; margin-bottom:10px; }
+.resume-list{ padding-left:20px; margin:0; list-style:disc; }
+.resume-list li{ margin-bottom:8px; color:var(--muted); font-size:.9rem; line-height:1.6; }
+.resume-list li::marker{ color:var(--sky); }
+
+.resume-skills-grid{ display:grid; gap:12px; }
+.resume-skill-row{ display:grid; grid-template-columns:200px 1fr; gap:15px; align-items:baseline; }
+.resume-skill-name{ font-weight:700; color:var(--text); font-size:.9rem; }
+.resume-skill-list{ color:var(--muted); font-size:.9rem; line-height:1.6; }
+
+@media (max-width: 768px){
+  .resume-skill-row{ grid-template-columns:1fr; gap:4px; }
+  .resume-item-head{ flex-direction:column; align-items:flex-start; gap:4px; }
 }
 
 /* ============================================================
-   8. WHAT I BRING
-   ============================================================ */
-.bring-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(268px, 1fr));
-  gap:14px;
-  margin-top:clamp(24px, 4vw, 42px);
-}
-.bring{
-  padding:24px 22px;
-  border-radius:var(--r-xl);
-  transition:transform .55s var(--ease), border-color .5s var(--ease);
-  --blur:24px;
-}
-.bring:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.38);}
-.bring .icon{
-  display:grid;
-  place-items:center;
-  width:46px;height:46px;
-  border-radius:14px;
-  font-size:1.2rem;
-  font-weight:800;
-  color:#0a0c18;
-  background:linear-gradient(140deg,var(--sky),var(--violet) 60%,var(--rose));
-  box-shadow:0 12px 26px -12px rgba(150,180,255,.95), inset 0 1px 0 rgba(255,255,255,.6);
-  margin-bottom:16px;
-}
-.bring h4{
-  font-size:1.02rem;
-  font-weight:750;
-  letter-spacing:-.015em;
-  line-height:1.3;
-}
-.bring p{
-  margin-top:8px;
-  font-size:.86rem;
-  color:var(--muted);
-  line-height:1.58;
-}
-
-/* ============================================================
-   9. PROJECTS
-   ============================================================ */
-.proj{
-  padding:clamp(24px, 3.6vw, 42px);
-  margin-top:20px;
-  --blur:26px;
-}
-.proj-head{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  padding-bottom:22px;
-  border-bottom:1px solid rgba(255,255,255,.13);
-  margin-bottom:26px;
-}
-.proj-num{
-  flex:0 0 auto;
-  display:grid;
-  place-items:center;
-  width:56px;height:56px;
-  border-radius:18px;
-  font-size:1.05rem;
-  font-weight:800;
-  letter-spacing:-.02em;
-  color:#0a0c18;
-  background:linear-gradient(140deg,#9ad8ff,#c0a6ff);
-  box-shadow:0 16px 34px -14px rgba(150,180,255,.95), inset 0 1px 0 rgba(255,255,255,.65);
-}
-.proj-head h3{
-  font-size:clamp(1.12rem, 2.8vw, 1.45rem);
-  font-weight:800;
-  letter-spacing:-.024em;
-  line-height:1.22;
-}
-.proj-sub{
-  margin-top:4px;
-  font-size:.78rem;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color:var(--faint);
-  font-weight:600;
-  line-height:1.5;
-}
-.proj-body{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:clamp(20px, 3.4vw, 36px);
-}
-.block h5{
-  font-size:.72rem;
-  font-weight:800;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:rgba(160,200,255,.92);
-  margin-bottom:10px;
-}
-.block p{
-  font-size:.9rem;
-  color:var(--muted);
-  line-height:1.65;
-}
-.block ul li{
-  position:relative;
-  padding-left:22px;
-  margin-bottom:10px;
-  font-size:.875rem;
-  color:var(--muted);
-  line-height:1.58;
-}
-.block ul li:last-child{margin-bottom:0;}
-.block ul li::before{
-  content:"";
-  position:absolute;
-  left:4px;top:.66em;
-  width:6px;height:6px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--sky),var(--violet));
-  box-shadow:0 0 9px rgba(125,211,252,.8);
-}
-.results-box{
-  padding:18px 20px;
-  border-radius:var(--r-md);
-  background:linear-gradient(150deg, rgba(94,234,212,.09), rgba(125,211,252,.05));
-  border:1px solid rgba(94,234,212,.22);
-}
-.results-box li{
-  color:rgba(230,240,255,.95);
-  padding-left:28px;
-  font-weight:500;
-}
-.results-box li::before{
-  content:"✓";
-  left:0;top:0;
-  width:auto;height:auto;
-  background:none;
-  box-shadow:none;
-  font-size:.88rem;
-  font-weight:900;
-  color:#6dfbb0;
-  text-shadow:0 0 12px rgba(109,251,176,.75);
-}
-
-/* ============================================================
-   10. WORKFLOW
-   ============================================================ */
-.workflow-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
-  gap:14px;
-  margin-top:clamp(24px, 4vw, 42px);
-}
-.step{
-  padding:24px 22px;
-  border-radius:var(--r-xl);
-  transition:transform .55s var(--ease), border-color .5s var(--ease);
-  --blur:22px;
-  position:relative;
-  overflow:hidden;
-}
-.step:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.38);}
-.step::before{
-  content:"";
-  position:absolute;
-  top:-20%;right:-10%;
-  width:120px;height:120px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(167,139,250,.32), transparent 70%);
-  filter:blur(16px);
-  pointer-events:none;
-}
-.step-num{
-  display:inline-block;
-  font-size:2.4rem;
-  font-weight:800;
-  letter-spacing:-.05em;
-  line-height:1;
-  background:linear-gradient(135deg,#8fd3ff,#c0a6ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  margin-bottom:10px;
-}
-.step h4{
-  font-size:1.02rem;
-  font-weight:750;
-  letter-spacing:-.014em;
-}
-.step p{
-  margin-top:6px;
-  font-size:.85rem;
-  color:var(--muted);
-  line-height:1.55;
-}
-.workflow-note{
-  margin-top:clamp(24px, 3.5vw, 36px);
-  padding:20px 24px;
-  border-radius:var(--r-lg);
-  background:linear-gradient(150deg, rgba(125,211,252,.08), rgba(167,139,250,.05));
-  border:1px solid rgba(255,255,255,.14);
-  font-size:clamp(.9rem, 1.6vw, .98rem);
-  color:rgba(236,242,255,.9);
-  text-align:center;
-  font-style:italic;
-}
-
-/* ============================================================
-   11. TOOLS
-   ============================================================ */
-.tools-group{
-  margin-top:clamp(22px, 3.4vw, 36px);
-}
-.tools-head{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:14px;
-  font-size:.76rem;
-  font-weight:700;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--faint);
-}
-.tools-head::after{
-  content:"";
-  flex:1;
-  height:1px;
-  background:linear-gradient(90deg, rgba(255,255,255,.22), transparent);
-}
-.chip-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-}
-.chip{
-  padding:10px 16px;
-  border-radius:999px;
-  font-size:.82rem;
-  font-weight:600;
-  color:rgba(240,245,255,.92);
-  background:linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.045));
-  border:1px solid rgba(255,255,255,.20);
-  -webkit-backdrop-filter:blur(14px);
-  backdrop-filter:blur(14px);
-  transition:transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
-}
-.chip:hover{
-  transform:translateY(-3px);
-  border-color:rgba(255,255,255,.4);
-  background:linear-gradient(150deg, rgba(255,255,255,.19), rgba(255,255,255,.07));
-}
-
-/* ============================================================
-   12. CURIOUS
-   ============================================================ */
-.curious-card{
-  padding:clamp(28px, 4.5vw, 52px);
-  --blur:28px;
-}
-.curious-card h2{
-  font-size:clamp(1.55rem, 3.6vw, 2.2rem);
-  font-weight:800;
-  letter-spacing:-.028em;
-  line-height:1.16;
-  margin-top:12px;
-}
-.curious-card p{
-  margin-top:16px;
-  color:var(--muted);
-  font-size:clamp(.93rem, 1.7vw, 1rem);
-  line-height:1.7;
-  max-width:68ch;
-}
-.curious-card p:last-child{color:rgba(220,232,255,.8);font-style:italic;}
-
-/* ============================================================
-   13. CONTACT / FOOTER
-   ============================================================ */
-.footer{
-  margin-top:clamp(36px, 5vw, 66px);
-  padding:clamp(28px, 4vw, 52px);
-  text-align:center;
-  --blur:26px;
-}
-.footer h2{
-  font-size:clamp(1.4rem, 3.8vw, 2.1rem);
-  font-weight:800;
-  letter-spacing:-.03em;
-  line-height:1.18;
-}
-.contact-links{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-  margin-top:28px;
-}
-.contact-link{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:14px 22px;
-  border-radius:999px;
-  font-size:.9rem;
-  font-weight:700;
-  background:linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.045));
-  border:1px solid rgba(255,255,255,.22);
-  -webkit-backdrop-filter:blur(14px);
-  backdrop-filter:blur(14px);
-  transition:transform .45s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
-}
-.contact-link:hover{
-  transform:translateY(-3px);
-  background:linear-gradient(150deg, rgba(255,255,255,.19), rgba(255,255,255,.07));
-  border-color:rgba(255,255,255,.4);
-}
-.contact-link .ic{
-  display:grid;
-  place-items:center;
-  width:26px;height:26px;
-  border-radius:50%;
-  background:linear-gradient(140deg,var(--sky),var(--violet));
-  color:#080a14;
-  font-size:.72rem;
-  font-weight:900;
-  flex:0 0 auto;
-}
-.copyright{
-  margin-top:28px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.11);
-  font-size:.76rem;
-  color:var(--faint);
-  letter-spacing:.03em;
-}
-
-/* ============================================================
-   14. REVEAL
+   8. REVEAL & RESPONSIVE
    ============================================================ */
 .reveal{
   opacity:0;
@@ -1009,9 +520,6 @@ ul{list-style:none;padding:0;}
 }
 .reveal.in{opacity:1;transform:none;}
 
-/* ============================================================
-   15. RESPONSIVE
-   ============================================================ */
 @media (max-width: 920px){
   .proj-body{grid-template-columns:1fr;}
 }
@@ -1042,6 +550,18 @@ ul{list-style:none;padding:0;}
   }
   .reveal{opacity:1;transform:none;}
 }
+
+/* Print styles for Resume */
+@media print {
+  body{background:#fff; color:#000; padding:0;}
+  .bg, .nav, .grain, .vignette, .actions-wrapper{display:none !important;}
+  .resume-card{box-shadow:none; border:none; background:none; padding:0; backdrop-filter:none; margin:0;}
+  .resume-title{color:#000; border-bottom-color:#ccc;}
+  .resume-item-sub{color:#333;}
+  .resume-list li, .resume-contact, .resume-skill-list{color:#444;}
+  .resume-list li::marker{color:#000;}
+  .resume-item-date{background:#eee; color:#333;}
+}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
 </head>
@@ -1057,207 +577,287 @@ ul{list-style:none;padding:0;}
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 
-<!-- NAV -->
+<!-- NAVIGATION -->
 <nav class="nav glass" aria-label="Primary">
-  <a href="#top" class="brand"><span class="dot"></span><?= e($profile['short']) ?></a>
+  <a href="<?= $baseUrl ?>" class="brand"><span class="dot"></span><?= e($profile['short']) ?></a>
   <div class="nav-links">
-    <a href="#bring">What I Bring</a>
-    <a href="#work">Work</a>
-    <a href="#contact">Contact</a>
-    <!-- Resume Button triggers the PHP Web Resume -->
-    <a href="<?= e($profile['resume_link']) ?>"
-       target="_blank"
-       rel="noopener"
-       class="nav-cta"
-       aria-label="View Web Resume">
-      Resume <span class="arrow" aria-hidden="true">↗</span>
-    </a>
+    <a href="<?= $navPrefix ?>#bring">What I Bring</a>
+    <a href="<?= $navPrefix ?>#work">Work</a>
+    <a href="<?= $navPrefix ?>#contact">Contact</a>
+    
+    <?php if ($isResume): ?>
+      <button onclick="window.print()" class="nav-cta" aria-label="Print Resume" style="margin-right: 4px;">
+        🖨️ Print <span class="arrow" aria-hidden="true">↗</span>
+      </button>
+      <a href="<?= $baseUrl ?>" class="nav-cta" aria-label="Back to Portfolio">
+        Back <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    <?php else: ?>
+      <a href="?open_resume=1" class="nav-cta" aria-label="View Resume">
+        Resume <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    <?php endif; ?>
   </div>
 </nav>
 
 <main>
-
-  <!-- ============ HERO ============ -->
-  <section id="top" class="wrap">
-    <div class="tilt" data-tilt="4">
-      <div class="glass hero-card reveal">
-        <div class="hero-copy">
-          <h1>Kola Jemima <span class="grad">Suyosha</span></h1>
-          <p class="lede"><?= e($profile['tagline']) ?></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ABOUT ============ -->
-  <section class="section wrap">
-    <div class="glass about-card reveal">
-      <span class="eyebrow">Hello, I'm Jemima!</span>
-      <p>
-        I'm a content marketing professional with a background in software services marketing and SEO.
-      </p>
-      <p>
-        I enjoy figuring out what people are searching for, what makes them stop scrolling, and what makes them think, "Okay, this is worth my time."
-      </p>
-      <p>
-        From website content to email campaigns, I like taking ideas from the messy first-draft stage to something clear, useful and ready for the world.
-      </p>
-      <p>
-        I believe good content should have two things: a reason to exist and a reason to be read.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ WHAT I BRING ============ -->
-  <section id="bring" class="section wrap">
-    <div class="reveal">
-      <span class="eyebrow">What I Bring to the Table</span>
-      <h2 class="section-title">Five roles, <span class="grad">one content engine</span></h2>
-    </div>
-
-    <div class="bring-grid">
-      <?php $icons = ['◆','✎','⌕','↻','✦']; $i = 0; foreach ($brings as $b): ?>
-        <div class="bring glass reveal" style="--d:<?= number_format($i * 0.07, 2) ?>s">
-          <div class="icon"><?= e($icons[$i] ?? '•') ?></div>
-          <h4><?= e($b['title']) ?></h4>
-          <p><?= e($b['desc']) ?></p>
-        </div>
-      <?php $i++; endforeach; ?>
-    </div>
-  </section>
-
-  <!-- ============ PROJECTS ============ -->
-  <section id="work" class="section wrap">
-    <div class="reveal">
-      <span class="eyebrow">A Few Projects I've Worked On</span>
-    </div>
-
-    <?php foreach ($projects as $p): ?>
-      <article class="proj glass reveal">
-        <header class="proj-head">
-          <span class="proj-num"><?= e($p['num']) ?></span>
-          <div>
-            <h3><?= e($p['title']) ?></h3>
-            <p class="proj-sub"><?= e($p['subtitle']) ?></p>
+  <?php if ($isResume): ?>
+    <!-- ============================================================ -->
+    <!-- WEB RESUME VIEW                                              -->
+    <!-- ============================================================ -->
+    <section class="wrap">
+      <div class="glass resume-card reveal in">
+        
+        <div class="resume-header">
+          <h1><?= e($profile['name']) ?></h1>
+          <div class="resume-contact">
+            <span>✉ <a href="mailto:<?= e($profile['email']) ?>"><?= e($profile['email']) ?></a></span>
+            <span>📞 <a href="tel:<?= e($profile['phone_raw']) ?>"><?= e($profile['phone']) ?></a></span>
           </div>
-        </header>
+        </div>
 
-        <div class="proj-body">
-          <div class="block">
-            <h5>Challenge</h5>
-            <p><?= e($p['challenge']) ?></p>
+        <!-- EDUCATION -->
+        <div class="resume-section">
+          <div class="resume-title">Education</div>
+          <div class="resume-item">
+            <div class="resume-item-head">
+              <div class="resume-item-title">Jawaharlal Nehru Technological University, Ananthapur</div>
+              <div class="resume-item-date">2018 - 2022</div>
+            </div>
+            <div class="resume-item-sub">Bachelor's in technology, Electronics and communication engineering</div>
           </div>
-          <div class="block">
-            <h5>Work Done</h5>
-            <ul>
-              <?php foreach ($p['work'] as $w): ?>
-                <li><?= e($w) ?></li>
-              <?php endforeach; ?>
+          <div class="resume-item">
+            <div class="resume-item-head">
+              <div class="resume-item-title">Narayana Junior college, Nellore</div>
+              <div class="resume-item-date">2016 - 2018</div>
+            </div>
+            <div class="resume-item-sub">MPC</div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="resume-section">
+          <div class="resume-title">Skills and Proficiencies</div>
+          <div class="resume-skills-grid">
+            <div class="resume-skill-row"><div class="resume-skill-name">Content Marketing & Strategy</div><div class="resume-skill-list">Content Strategy, Content Planning, Content Creation, Content Research, Blog Writing, Website Content Development, Content Optimization, Competitor Research.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Email & Campaign Marketing</div><div class="resume-skill-list">Email Campaign Content, Social Media Content, Content Distribution, Lead Generation.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">AI-Assisted Content Creation</div><div class="resume-skill-list">AI-Powered Research, AI-Assisted Writing, Content Editing, Content Refinement, Content Ideation.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">SEO & Organic Growth</div><div class="resume-skill-list">Technical SEO, On-Page SEO, Off-Page SEO, Keyword Research, Search Intent Analysis, Website Audits, Link Building.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Website Platforms</div><div class="resume-skill-list">WordPress, Wix, Google Sites.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Leadership & Collaboration</div><div class="resume-skill-list">Independent Project Management, Junior Team Mentoring, Cross-functional Collaboration.</div></div>
+          </div>
+        </div>
+
+        <!-- WORK EXPERIENCE -->
+        <div class="resume-section">
+          <div class="resume-title">Work Experience</div>
+          <div class="resume-item">
+            <div class="resume-item-head">
+              <div class="resume-item-title">Fexle Services Pvt Ltd</div>
+              <div class="resume-item-date">Jan 2023 - Feb 2025</div>
+            </div>
+            <div class="resume-item-sub">Marketing Associate</div>
+            <ul class="resume-list">
+              <li>Independently researched, planned, created and optimized SEO-focused articles, blogs and website content.</li>
+              <li>Developed content based on keyword research, search intent, competitor analysis and business requirements.</li>
+              <li>Created email campaign content and follow-up emails to support marketing communication and lead nurturing.</li>
+              <li>Used AI tools to assist with content research, drafting and refinement.</li>
+              <li>Managed website content and technical, on-page and off-page SEO activities.</li>
+              <li>Coordinated with developers to implement website improvements.</li>
+              <li>Managed social media campaigns to distribute content and generate business enquiries.</li>
+              <li>Analyzed marketing performance and prepared weekly reports.</li>
+              <li>Mentored three junior team members and organized employee engagement activities.</li>
             </ul>
           </div>
-          <div class="block" style="grid-column:1 / -1;">
-            <h5>Results</h5>
-            <div class="results-box">
-              <ul>
-                <?php foreach ($p['results'] as $r): ?>
-                  <li><?= e($r) ?></li>
-                <?php endforeach; ?>
-              </ul>
-            </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="resume-section">
+          <div class="resume-title">Projects</div>
+          <div class="resume-item">
+            <div class="resume-item-title">Quizophy – Website SEO Optimization</div>
+            <ul class="resume-list">
+              <li>Executed website SEO initiatives to strengthen Quizophy's organic search presence and improve search engine discoverability.</li>
+              <li>Focused on optimizing the website for better visibility and long-term organic growth.</li>
+            </ul>
+          </div>
+          <div class="resume-item">
+            <div class="resume-item-title">Fexle Services – SEO & Content Marketing Management</div>
+            <ul class="resume-list">
+              <li>Independently managed diverse SEO and digital marketing initiatives, spanning content development, website optimization, technical audits and supporting website creation.</li>
+              <li>Led social media campaigns and lead generation activities, contributing to stronger organic visibility and business enquiries.</li>
+              <li>Written content for social media channels (LinkedIn, Instagram, Facebook) and website pages.</li>
+            </ul>
           </div>
         </div>
-      </article>
-    <?php endforeach; ?>
-  </section>
 
-  <!-- ============ WORKFLOW ============ -->
-  <section class="section wrap">
-    <div class="reveal">
-      <span class="eyebrow">My Content Workflow</span>
-      <h2 class="section-title">A repeatable path <span class="grad">from idea to impact</span></h2>
-      <p class="section-lede">
-        I don't believe in creating content just because the calendar says Tuesday.
-      </p>
-    </div>
+        <!-- ACHIEVEMENTS -->
+        <div class="resume-section">
+          <div class="resume-title">Achievements</div>
+          <ul class="resume-list">
+            <li>Produced 50+ SEO content pieces, including articles, blogs and website content.</li>
+            <li>Optimized 25+ existing articles to improve search performance.</li>
+            <li>Secured first-page Google rankings for 20+ articles.</li>
+            <li>Achieved #1 Google rankings for 10–20 target keywords.</li>
+            <li>Contributed to 40% organic traffic growth across the website and articles within 1–3 months.</li>
+            <li>Generated 6 - 7 qualified leads per month through social media campaigns.</li>
+            <li>Contributed to at least one customer conversion per month for software services.</li>
+            <li>Developed approximately 5 supporting websites to strengthen off-page SEO initiatives.</li>
+          </ul>
+        </div>
 
-    <div class="workflow-grid">
-      <?php $i = 0; foreach ($workflow as $w): ?>
-        <div class="step glass reveal" style="--d:<?= number_format($i * 0.07, 2) ?>s">
-          <div class="step-num"><?= e($w['step']) ?></div>
-          <h4><?= e($w['title']) ?></h4>
-          <p><?= e($w['desc']) ?></p>
+        <!-- TOOLS -->
+        <div class="resume-section">
+          <div class="resume-title">Tools & Technologies</div>
+          <div class="resume-skills-grid">
+            <div class="resume-skill-row"><div class="resume-skill-name">AI Tools & Research</div><div class="resume-skill-list">ChatGPT, Gemini, Claude, Perplexity, Bing.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Content Creation & Mgmt</div><div class="resume-skill-list">WordPress, Google Sites, Wix, Notion, Canva, Microsoft Word, Hemingway Editor, Grammarly.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">SEO & Keyword Research</div><div class="resume-skill-list">Google Search Console, Screaming Frog, Semrush, Ahrefs, Google Keyword Planner, Google Trends, AnswerThePublic.</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Analytics & Performance</div><div class="resume-skill-list">Google Analytics 4 (GA4), Looker Studio, Google Tag Manager</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Email Marketing & CRM</div><div class="resume-skill-list">Mailchimp</div></div>
+            <div class="resume-skill-row"><div class="resume-skill-name">Productivity & PM</div><div class="resume-skill-list">Microsoft Excel, Google Slides, Trello, Jira, Confluence.</div></div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+  <?php else: ?>
+    <!-- ============================================================ -->
+    <!-- MAIN PORTFOLIO VIEW                                          -->
+    <!-- ============================================================ -->
+    
+    <!-- HERO -->
+    <section id="top" class="wrap">
+      <div class="tilt" data-tilt="4">
+        <div class="glass hero-card reveal">
+          <div class="hero-copy">
+            <h1>Kola Jemima <span class="grad">Suyosha</span></h1>
+            <p class="lede"><?= e($profile['tagline']) ?></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section wrap">
+      <div class="glass about-card reveal">
+        <span class="eyebrow">Hello, I'm Jemima!</span>
+        <p>I'm a content marketing professional with a background in software services marketing and SEO.</p>
+        <p>I enjoy figuring out what people are searching for, what makes them stop scrolling, and what makes them think, "Okay, this is worth my time."</p>
+        <p>From website content to email campaigns, I like taking ideas from the messy first-draft stage to something clear, useful and ready for the world.</p>
+        <p>I believe good content should have two things: a reason to exist and a reason to be read.</p>
+      </div>
+    </section>
+
+    <!-- WHAT I BRING -->
+    <section id="bring" class="section wrap">
+      <div class="reveal">
+        <span class="eyebrow">What I Bring to the Table</span>
+        <h2 class="section-title">Five roles, <span class="grad">one content engine</span></h2>
+      </div>
+      <div class="bring-grid">
+        <?php $icons = ['◆','✎','⌕','↻','✦']; $i = 0; foreach ($brings as $b): ?>
+          <div class="bring glass reveal" style="--d:<?= number_format($i * 0.07, 2) ?>s">
+            <div class="icon"><?= e($icons[$i] ?? '•') ?></div>
+            <h4><?= e($b['title']) ?></h4>
+            <p><?= e($b['desc']) ?></p>
+          </div>
+        <?php $i++; endforeach; ?>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="work" class="section wrap">
+      <div class="reveal">
+        <span class="eyebrow">A Few Projects I've Worked On</span>
+      </div>
+      <?php foreach ($projects as $p): ?>
+        <article class="proj glass reveal">
+          <header class="proj-head">
+            <span class="proj-num"><?= e($p['num']) ?></span>
+            <div>
+              <h3><?= e($p['title']) ?></h3>
+              <p class="proj-sub"><?= e($p['subtitle']) ?></p>
+            </div>
+          </header>
+          <div class="proj-body">
+            <div class="block">
+              <h5>Challenge</h5>
+              <p><?= e($p['challenge']) ?></p>
+            </div>
+            <div class="block">
+              <h5>Work Done</h5>
+              <ul><?php foreach ($p['work'] as $w): ?><li><?= e($w) ?></li><?php endforeach; ?></ul>
+            </div>
+            <div class="block" style="grid-column:1 / -1;">
+              <h5>Results</h5>
+              <div class="results-box"><ul><?php foreach ($p['results'] as $r): ?><li><?= e($r) ?></li><?php endforeach; ?></ul></div>
+            </div>
+          </div>
+        </article>
+      <?php endforeach; ?>
+    </section>
+
+    <!-- WORKFLOW -->
+    <section class="section wrap">
+      <div class="reveal">
+        <span class="eyebrow">My Content Workflow</span>
+        <h2 class="section-title">A repeatable path <span class="grad">from idea to impact</span></h2>
+        <p class="section-lede">I don't believe in creating content just because the calendar says Tuesday.</p>
+      </div>
+      <div class="workflow-grid">
+        <?php $i = 0; foreach ($workflow as $w): ?>
+          <div class="step glass reveal" style="--d:<?= number_format($i * 0.07, 2) ?>s">
+            <div class="step-num"><?= e($w['step']) ?></div>
+            <h4><?= e($w['title']) ?></h4>
+            <p><?= e($w['desc']) ?></p>
+          </div>
+        <?php $i++; endforeach; ?>
+      </div>
+      <p class="workflow-note reveal">The goal isn't simply to publish more. It's to make every piece count.</p>
+    </section>
+
+    <!-- TOOLS -->
+    <section class="section wrap">
+      <div class="reveal"><span class="eyebrow">Tools &amp; Technologies</span></div>
+      <?php $i = 0; foreach ($toolGroups as $group => $items): ?>
+        <div class="tools-group reveal" style="--d:<?= number_format($i * 0.06, 2) ?>s">
+          <div class="tools-head"><?= e($group) ?></div>
+          <div class="chip-grid"><?php foreach ($items as $tool): ?><span class="chip"><?= e($tool) ?></span><?php endforeach; ?></div>
         </div>
       <?php $i++; endforeach; ?>
-    </div>
+    </section>
 
-    <p class="workflow-note reveal">
-      The goal isn't simply to publish more. It's to make every piece count.
-    </p>
-  </section>
+    <!-- CURIOUS -->
+    <section class="section wrap">
+      <div class="glass curious-card reveal">
+        <span class="eyebrow">What I'm Curious About Next</span>
+        <h2>Where I want to <span class="grad">take this next</span></h2>
+        <p>I'm especially interested in SaaS, technology and global products.</p>
+        <p>I love the challenge of making complicated products easier to understand, creating content that earns attention, and finding fresh ways to connect brands with people.</p>
+        <p>I'm always learning, experimenting and collecting ideas. Some become content strategies. Others remain in my notes app, waiting for their moment.</p>
+      </div>
+    </section>
 
-  <!-- ============ TOOLS ============ -->
-  <section class="section wrap">
-    <div class="reveal">
-      <span class="eyebrow">Tools &amp; Technologies</span>
-    </div>
-
-    <?php $i = 0; foreach ($toolGroups as $group => $items): ?>
-      <div class="tools-group reveal" style="--d:<?= number_format($i * 0.06, 2) ?>s">
-        <div class="tools-head"><?= e($group) ?></div>
-        <div class="chip-grid">
-          <?php foreach ($items as $tool): ?>
-            <span class="chip"><?= e($tool) ?></span>
-          <?php endforeach; ?>
+    <!-- CONTACT -->
+    <section id="contact" class="wrap">
+      <div class="footer glass reveal">
+        <h2>Let's make something <span class="grad">worth reading.</span></h2>
+        <div class="contact-links">
+          <a href="mailto:<?= e($profile['email']) ?>" class="contact-link"><span class="ic">@</span><?= e($profile['email']) ?></a>
+          <a href="tel:<?= e($profile['phone_raw']) ?>" class="contact-link"><span class="ic">☎</span><?= e($profile['phone']) ?></a>
         </div>
+        <div class="copyright">© <?= date('Y') ?> <?= e($profile['name']) ?></div>
       </div>
-    <?php $i++; endforeach; ?>
-  </section>
+    </section>
 
-  <!-- ============ CURIOUS ============ -->
-  <section class="section wrap">
-    <div class="glass curious-card reveal">
-      <span class="eyebrow">What I'm Curious About Next</span>
-      <h2>Where I want to <span class="grad">take this next</span></h2>
-      <p>
-        I'm especially interested in SaaS, technology and global products.
-      </p>
-      <p>
-        I love the challenge of making complicated products easier to understand, creating content that earns attention, and finding fresh ways to connect brands with people.
-      </p>
-      <p>
-        I'm always learning, experimenting and collecting ideas. Some become content strategies. Others remain in my notes app, waiting for their moment.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ CONTACT ============ -->
-  <section id="contact" class="wrap">
-    <div class="footer glass reveal">
-      <h2>Let's make something <span class="grad">worth reading.</span></h2>
-
-      <div class="contact-links">
-        <a href="mailto:<?= e($profile['email']) ?>" class="contact-link">
-          <span class="ic">@</span>
-          <?= e($profile['email']) ?>
-        </a>
-        <a href="tel:<?= e($profile['phone_raw']) ?>" class="contact-link">
-          <span class="ic">☎</span>
-          <?= e($profile['phone']) ?>
-        </a>
-      </div>
-
-      <div class="copyright">
-        © <?= date('Y') ?> <?= e($profile['name']) ?>
-      </div>
-    </div>
-  </section>
-
+  <?php endif; ?>
 </main>
 
 <script>
 (() => {
   'use strict';
-
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canHover     = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -1287,9 +887,7 @@ ul{list-style:none;padding:0;}
       const loop = () => {
         cx += (tx - cx) * 0.14;
         cy += (ty - cy) * 0.14;
-        el.style.transform =
-          'perspective(1100px) rotateX(' + (-cy * max).toFixed(3) + 'deg) ' +
-          'rotateY(' + (cx * max).toFixed(3) + 'deg) translateZ(0)';
+        el.style.transform = 'perspective(1100px) rotateX(' + (-cy * max).toFixed(3) + 'deg) rotateY(' + (cx * max).toFixed(3) + 'deg) translateZ(0)';
         if (hovering || Math.abs(tx - cx) > 0.0006 || Math.abs(ty - cy) > 0.0006) {
           raf = requestAnimationFrame(loop);
         } else {
@@ -1310,16 +908,14 @@ ul{list-style:none;padding:0;}
         const r = el.getBoundingClientRect();
         const px = (ev.clientX - r.left) / r.width;
         const py = (ev.clientY - r.top) / r.height;
-        tx = (px - 0.5) * 2;
-        ty = (py - 0.5) * 2;
+        tx = (px - 0.5) * 2; ty = (py - 0.5) * 2;
         const glass = el.querySelector('.glass') || el;
         glass.style.setProperty('--mx', (px * 100).toFixed(2) + '%');
         glass.style.setProperty('--my', (py * 100).toFixed(2) + '%');
       });
 
       el.addEventListener('pointerleave', () => {
-        hovering = false;
-        tx = 0; ty = 0;
+        hovering = false; tx = 0; ty = 0;
         el.style.transition = 'transform .75s cubic-bezier(.16,1,.3,1)';
         start();
       });
@@ -1342,17 +938,13 @@ ul{list-style:none;padding:0;}
   /* ---------- Nav shadow on scroll ---------- */
   const nav = document.querySelector('.nav');
   let lastState = false;
-  const onScroll = () => {
+  window.addEventListener('scroll', () => {
     const scrolled = window.scrollY > 12;
     if (scrolled !== lastState) {
       lastState = scrolled;
-      nav.style.boxShadow = scrolled
-        ? '0 30px 60px -28px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.45)'
-        : '';
+      nav.style.boxShadow = scrolled ? '0 30px 60px -28px rgba(0,0,0,.92), inset 0 1px 0 rgba(255,255,255,.45)' : '';
     }
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  }, { passive: true });
 
   /* ---------- Smooth anchor scroll ---------- */
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
@@ -1364,10 +956,7 @@ ul{list-style:none;padding:0;}
       ev.preventDefault();
       const offset = nav ? nav.getBoundingClientRect().height + 28 : 90;
       const top = target.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({
-        top: Math.max(top, 0),
-        behavior: reduceMotion ? 'auto' : 'smooth'
-      });
+      window.scrollTo({ top: Math.max(top, 0), behavior: reduceMotion ? 'auto' : 'smooth' });
     });
   });
 })();
