@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /* ============================================================
    KOLA JEMIMA SUYOSHA — PORTFOLIO & WEB RESUME
-   Fully Responsive for All Devices
+   Vercel Ready Version
    ============================================================ */
 
 $profile = [
@@ -15,8 +15,13 @@ $profile = [
     'phone_raw'   => '+919100253853',
 ];
 
+// Vercel లో ఆటోమేటిక్ URL మారేలా డైనమిక్ బేస్ URL
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$uri = strtok($_SERVER['REQUEST_URI'] ?? '', '?');
+$baseUrl = $protocol . '://' . $host . $uri;
+
 $isResume = isset($_GET['open_resume']);
-$baseUrl  = 'https://dynamicflash.xyz/Portfolio.php';
 $navPrefix = $isResume ? $baseUrl : '';
 
 $brings = [
@@ -373,19 +378,16 @@ ul{list-style:none;padding:0;}
   .nav { padding: 6px 8px 6px 16px; }
   .brand { font-size: .88rem; }
   
-  /* Hide text links on mobile, keep only CTA buttons */
   .nav-links a:not(.nav-cta) { display: none; }
   
-  /* Adjust CTA buttons for mobile side-by-side */
   .nav-links { gap: 6px; overflow: visible; }
   .nav-cta { padding: 7px 12px !important; font-size: .78rem; }
-  .nav-cta .arrow { display: none; } /* Hide arrow on mobile to save space */
+  .nav-cta .arrow { display: none; }
   
   .resume-item-head { flex-direction: column; align-items: flex-start; gap: 4px; }
   .contact-link { width: 100%; justify-content: center; }
   .workflow-grid { grid-template-columns: 1fr; }
   
-  /* Resume specific mobile padding */
   .resume-card { padding: 20px 16px; }
   .resume-header h1 { font-size: 1.6rem; }
   .resume-contact { flex-direction: column; gap: 6px; }
@@ -397,7 +399,6 @@ ul{list-style:none;padding:0;}
   .bring-grid { grid-template-columns: 1fr; }
   .proj-num { width: 40px; height: 40px; font-size: .85rem; border-radius: 12px; }
   
-  /* Adjust buttons to fit small screens */
   .nav { width: calc(100% - 12px); padding-left: 12px; }
   .nav-cta { padding: 6px 10px !important; font-size: .75rem; }
 }
